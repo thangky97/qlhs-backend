@@ -1,0 +1,7 @@
+When node_modules is not being ignored, do the following:
+
+git rm -r --cached node_modules
+git add .
+git commit -m "removing node_modules"
+git push -u origin master/main etc
+Done.
