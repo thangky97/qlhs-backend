@@ -163,11 +163,10 @@ async function customGetDetail(id, lang) {
         include: [
           {
             model: DB.course,
-            required: false,
+            as: "course",
           },
           {
-            model: DB.instructors,
-            required: false,
+            model: DB.staff,
           },
         ],
       },

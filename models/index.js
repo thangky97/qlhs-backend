@@ -125,6 +125,13 @@ db.coursevideoss = require("./coures/course_videos")(sequelize, Sequelize);
 db.coursefiles = require("./coures/course_files")(sequelize, Sequelize);
 db.courseratings = require("./coures/course_ratings")(sequelize, Sequelize);
 
+//classroom
+db.classroom = require("./classroom/classroom.model")(sequelize, Sequelize);
+
+//classroom
+db.department = require("./department/department.model")(sequelize, Sequelize);
+
+//quan he
 db.product.hasMany(db.product_name, { foreignKey: "product_id" });
 db.product_name.belongsTo(db.product, { foreignKey: "id" });
 db.product.hasMany(db.product_description, { foreignKey: "product_id" });
@@ -133,13 +140,14 @@ db.product_description.belongsTo(db.product, { foreignKey: "id" });
 db.notifications.belongsTo(db.users, { foreignKey: "usersId" });
 
 //quan he
-db.product.hasMany(db.curriculum_sections, { as: "course" });
+db.course.hasMany(db.curriculum_sections, { as: "course" });
 db.curriculum_sections.belongsTo(db.course, {
-  foreignKey: "subjectId",
+  foreignKey: "courseId",
 });
+
 //quan he
-db.product.hasMany(db.curriculum_sections, { as: "course_instructor" });
-db.curriculum_sections.belongsTo(db.instructors, {
+db.staff.hasMany(db.curriculum_sections, { as: "course_instructor" });
+db.curriculum_sections.belongsTo(db.staff, {
   foreignKey: "instructorId",
 });
 
@@ -147,6 +155,12 @@ db.curriculum_sections.belongsTo(db.instructors, {
 db.product.hasMany(db.curriculum_sections, { as: "sections" });
 db.curriculum_sections.belongsTo(db.product, {
   foreignKey: "productId",
+});
+
+//quan he
+db.staff.hasMany(db.department, { as: "staff" });
+db.department.belongsTo(db.staff, {
+  foreignKey: "usersId",
 });
 
 module.exports = db;

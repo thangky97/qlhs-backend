@@ -1,7 +1,7 @@
 "use strict";
-const NotificationResourceAccess = require("../resourceAccess/NotificationResourceAccess");
+const ClassroomResourceAccess = require("../resourceAccess/ClassroomResourceAccess");
 const Logger = require("../../../utils/logging");
-const { category_ERROR, STAFF_ROLE } = require("../NotificationConstant");
+const { STAFF_ROLE } = require("../ClassroomConstant");
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 async function insert(req) {
@@ -11,19 +11,19 @@ async function insert(req) {
         (await CommonFunctions.verifyRole(
           req.currentUser,
           STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_SYSTEM,
+          STAFF_ROLE.MANAGE_USER
         )) == false
       ) {
         reject("NOT_ALLOWED");
         return;
       }
-      let categoryData = req.payload;
+      let classroomData = req.payload;
 
       //create new user
-      let addResult = await NotificationResourceAccess.insert(categoryData);
-      console.log(addResult);
+      let addResult = await ClassroomResourceAccess.insert(classroomData);
       if (addResult === undefined) {
-        reject("can not insert category");
+        reject("can not insert classroom");
         return;
       } else {
         resolve(addResult);
@@ -31,7 +31,6 @@ async function insert(req) {
       return;
     } catch (e) {
       Logger.error(`${__filename} ${e}`);
-      reject("failed");
     }
   });
 }
@@ -43,7 +42,8 @@ async function find(req) {
         (await CommonFunctions.verifyRole(
           req.currentUser,
           STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_SYSTEM,
+          STAFF_ROLE.MANAGE_USER
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -58,19 +58,19 @@ async function find(req) {
         filter = {};
       }
 
-      let categorys = await NotificationResourceAccess.customFind(
+      let classroom = await ClassroomResourceAccess.customFind(
         filter,
         skip,
         limit,
-        [order.key, order.value]
+        order
       );
 
-      if (categorys && categorys.length > 0) {
-        let categorysCount = await NotificationResourceAccess.count(filter, [
+      if (classroom && classroom.length > 0) {
+        let classroomCount = await ClassroomResourceAccess.count(filter, [
           order.key,
           order.value,
         ]);
-        resolve({ data: categorys, total: categorysCount });
+        resolve({ data: classroom, total: classroomCount });
       } else {
         resolve({ data: [], total: 0 });
       }
@@ -80,6 +80,7 @@ async function find(req) {
     }
   });
 }
+
 async function getList(req) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -89,17 +90,15 @@ async function getList(req) {
       let order = req.payload.order;
       let searchText = filter.name;
       delete filter.name;
-      let data = await NotificationResourceAccess.customFind(
+      let data = await ClassroomResourceAccess.customFind(
         filter,
         skip,
         limit,
-        [order.key, order.value],
+        order,
         searchText
       );
       if (data && data.length > 0) {
-        delete filter.lang;
-        delete filter.service_type;
-        let count = await NotificationResourceAccess.customCount(filter);
+        let count = await ClassroomResourceAccess.customCount(filter);
         resolve({ data: data, total: count });
       } else {
         resolve({ data: [], total: 0 });
@@ -117,75 +116,32 @@ async function updateById(req) {
         (await CommonFunctions.verifyRole(
           req.currentUser,
           STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_SYSTEM,
+          STAFF_ROLE.MANAGE_USER
         )) == false
       ) {
         reject("NOT_ALLOWED");
         return;
       }
-      let categoryData = req.payload.data;
-      let code = req.payload.code;
 
-      let updateResult = await NotificationResourceAccess.updateById(
-        code,
-        categoryData
+      let courrseId = req.payload.id;
+      let classroomData = req.payload.data;
+
+      let updateResult = await ClassroomResourceAccess.updateById(
+        courrseId,
+        classroomData
       );
+
       if (updateResult) {
-        resolve("success");
+        delete updateResult.password;
+        resolve(updateResult);
       }
 
-      reject("failed to update category");
+      reject("failed to update classroom");
     } catch (e) {
       Logger.error(__filename + e);
       reject(e);
     }
-  });
-}
-async function getDetail(req) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const data = await NotificationResourceAccess.userGetDetail(
-        req.query.productId,
-        req.query.usersId
-        // req.query.lang
-      );
-      if (data) {
-        resolve(data);
-      } else {
-        resolve({});
-      }
-    } catch (error) {
-      Logger.error("get detail product error " + error);
-      reject("failed");
-    }
-  });
-}
-async function deleteById(req) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
-      let section = await NotificationResourceAccess.deleteByCode(
-        req.query.code,
-        "id"
-      );
-      if (section) {
-        resolve(section);
-      }
-      reject("Not found section");
-    } catch (e) {
-      Logger.error(__filename, e);
-      reject("failed");
-    }
-    return;
   });
 }
 async function findById(req) {
@@ -195,21 +151,22 @@ async function findById(req) {
         (await CommonFunctions.verifyRole(
           req.currentUser,
           STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_SYSTEM,
+          STAFF_ROLE.MANAGE_USER
         )) == false
       ) {
         reject("NOT_ALLOWED");
         return;
       }
-      let category = await NotificationResourceAccess.findById(
+      let classroom = await ClassroomResourceAccess.findById(
         req.query.id,
         "id"
       );
-      if (category) {
-        delete category.password;
-        resolve(category);
+      if (classroom) {
+        delete classroom.password;
+        resolve(classroom);
       }
-      reject("Not found category");
+      reject("Not found classroom");
     } catch (e) {
       Logger.error(__filename, e);
       reject("failed");
@@ -224,6 +181,4 @@ module.exports = {
   updateById,
   findById,
   getList,
-  getDetail,
-  deleteById,
 };

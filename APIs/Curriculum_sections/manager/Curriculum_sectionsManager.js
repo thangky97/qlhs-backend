@@ -10,7 +10,8 @@ async function insert(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -28,7 +29,7 @@ async function insert(req) {
         password: SectionsData.password,
         instructorId: SectionsData.instructorId,
         productId: SectionsData.productId,
-        subjectId: SectionsData.subjectId,
+        courseId: SectionsData.courseId,
         description: SectionsData.description,
         status: SectionsData.status,
         lang: SectionsData.lang,
@@ -54,7 +55,8 @@ async function find(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -125,7 +127,8 @@ async function updateById(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -173,7 +176,8 @@ async function findById(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -198,7 +202,8 @@ async function deleteById(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");

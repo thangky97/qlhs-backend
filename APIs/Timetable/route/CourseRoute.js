@@ -1,46 +1,25 @@
 "use strict";
-const moduleName = "Curriculum_sections";
+const moduleName = "Course";
 const Manager = require(`../manager/${moduleName}Manager`);
 const Joi = require("joi");
 const Response = require("../../Common/route/response").setup(Manager);
 const CommonFunctions = require("../../Common/CommonFunctions");
+
 const insertSchema = {
-  code: Joi.string(),
-  title: Joi.string().allow(""),
-  number_students: Joi.string().allow(null),
-  time: Joi.string().allow(null),
-  date: Joi.string().allow(null),
-  password: Joi.string().allow(null),
-  instructorId: Joi.number(),
-  courseId: Joi.number().allow(null),
-  productId: Joi.number(),
-  description: Joi.string().allow(""),
+  name: Joi.string(),
+  description: Joi.string(),
   status: Joi.number().valid(0, 1).default(1).required(),
-  lang: Joi.string().allow(""),
 };
 
 const updateSchema = {
-  code: Joi.string(),
-  title: Joi.string().allow(""),
-  number_students: Joi.string().allow(null),
-  time: Joi.string().allow(null),
-  date: Joi.string().allow(null),
-  password: Joi.string().allow(null),
-  instructorId: Joi.number(),
-  courseId: Joi.number().allow(null),
-  productId: Joi.number(),
-  description: Joi.string().allow(""),
+  name: Joi.string(),
+  description: Joi.string(),
   status: Joi.number().valid(0, 1).default(1).required(),
-  lang: Joi.string().allow(""),
 };
 
 const filterSchema = {
+  name: Joi.string(),
   status: Joi.number().valid(0, 1),
-  lang: Joi.string(),
-  code: Joi.string(),
-  instructorId: Joi.number().allow(""),
-  courseId: Joi.number().allow(""),
-  productId: Joi.number().allow(""),
 };
 
 module.exports = {
@@ -148,7 +127,7 @@ module.exports = {
       payload: Joi.object({
         filter: Joi.object(filterSchema),
         skip: Joi.number().default(0).min(0),
-        limit: Joi.number().default(20),
+        limit: Joi.number().max(100),
         order: Joi.array().items(
           Joi.object({
             key: Joi.string(),
@@ -159,25 +138,6 @@ module.exports = {
     },
     handler: async function (req, res) {
       return await Response(req, res, "find");
-    },
-  },
-  deleteById: {
-    tags: ["api", `${moduleName}`],
-    description: `find by id ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyStaffToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      query: Joi.object({
-        id: Joi.number().min(0),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "deleteById");
     },
   },
   findById: {
@@ -197,21 +157,6 @@ module.exports = {
     },
     handler: async function (req, res) {
       return await Response(req, res, "findById");
-    },
-  },
-  getDetail: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      query: Joi.object({
-        id: Joi.number(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "getDetail");
     },
   },
 };

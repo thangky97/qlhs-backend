@@ -17,7 +17,8 @@ async function find(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -87,7 +88,8 @@ async function insert(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -160,7 +162,8 @@ async function update(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -252,7 +255,8 @@ async function deleteById(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -506,7 +510,8 @@ async function getTransactions(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -571,7 +576,8 @@ async function updateTransaction(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -753,7 +759,8 @@ async function getTransactionsToken(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
+          STAFF_ROLE.MANAGE_STAFF,
+          STAFF_ROLE.MANAGE_SYSTEM
         )) == false
       ) {
         reject("NOT_ALLOWED");

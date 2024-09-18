@@ -23,6 +23,8 @@ const Course_progressRoute = require("../APIs/Course_progress/route/index");
 const Transcript = require("../APIs/Transcript/route/index");
 const DemoCloudApplicaion = require("../APIs/Demo_Cloud_Application/route/index");
 const Course = require("../APIs/Course/route/index");
+const Classroom = require("../APIs/Classroom/route/index");
+const Department = require("../APIs/Department/route/index");
 
 var APIs = [
   //Upload APIs
@@ -67,6 +69,8 @@ APIs = APIs.concat(Course_progressRoute);
 APIs = APIs.concat(Transcript);
 APIs = APIs.concat(DemoCloudApplicaion);
 APIs = APIs.concat(Course);
+APIs = APIs.concat(Classroom);
+APIs = APIs.concat(Department);
 
 // Q Trafic
 APIs = APIs.concat(require("../APIs/Intersection/route"));

@@ -20,7 +20,7 @@ const updateSchema = {
   last_name: Joi.string(),
   first_name: Joi.string(),
   phone: Joi.string(),
-  roleId: Joi.number(),
+  role: Joi.string(),
   email: Joi.string().email(),
   status: Joi.number().valid(0, 1, 2),
   role: Joi.string(),
@@ -30,7 +30,11 @@ const filterSchema = {
   last_name: Joi.string(),
   first_name: Joi.string(),
   phone: Joi.string(),
-  roleId: Joi.number(),
+  // role: Joi.string(),
+  role: Joi.alternatives().try(
+    Joi.string(), // Cho phép role là một chuỗi
+    Joi.array().items(Joi.string()) // Hoặc là một mảng các chuỗi
+  ),
   email: Joi.string().email(),
   status: Joi.number().valid(0, 1, 2),
 };

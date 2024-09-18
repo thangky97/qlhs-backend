@@ -106,12 +106,12 @@ async function customFind(filter, skip, limit, orderBy) {
       return [item.key, item.value];
     }),
     include: [
-      {
-        model: db["users"],
-      },
-      {
-        model: db["transaction"],
-      },
+      // {
+      //   model: db["users"],
+      // },
+      // {
+      //   model: db["transaction"],
+      // },
     ],
   });
 
