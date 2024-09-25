@@ -56,13 +56,6 @@ async function customFind(functionName, filter, skip, limit) {
       // }
     },
     order: [["DateTime", "DESC"]],
-    include: [
-      {
-        model: DB.m_intersection,
-        required: true,
-        where: filterParams,
-      },
-    ],
   });
 
   return queryBuilder;
@@ -82,13 +75,6 @@ async function customCount(filter) {
       User_ID: filter.User_ID,
     },
     order: [["DateTime", "DESC"]],
-    include: [
-      {
-        model: DB.m_intersection,
-        required: true,
-        where: filterParams,
-      },
-    ],
   });
 
   return queryBuilder;

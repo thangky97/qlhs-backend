@@ -135,17 +135,6 @@ async function find(filter, language, skip, limit, order) {
     offset: skip,
     limit: limit,
     order: [order],
-    include: [
-      {
-        model: document_label,
-        required: false,
-        // as:"documents"
-      },
-      {
-        model: document_content,
-        required: false,
-      },
-    ],
   });
 }
 
@@ -154,18 +143,6 @@ async function findById(id, language) {
     console.log(id, language);
     return await db.document.findOne({
       where: { id: id },
-      include: [
-        {
-          model: document_label,
-          required: false,
-          where: { lang: language },
-        },
-        {
-          model: document_content,
-          required: false,
-          where: { lang: language },
-        },
-      ],
     });
   } catch (e) {
     console.log(e);

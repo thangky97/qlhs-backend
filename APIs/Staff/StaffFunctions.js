@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 const StaffResourceAccess = require("./resourceAccess/StaffResourceAccess");
-const { STAFF_ERROR } = require('./StaffConstant');
+const { STAFF_ERROR } = require("./StaffConstant");
 
 const crypto = require("crypto");
 
@@ -24,7 +24,7 @@ async function verifyCredentials(username, password) {
   // matches either the email or username
   let verifyResult = await StaffResourceAccess.find({
     username: username,
-    password: hashedPassword
+    password: hashedPassword,
   });
 
   if (verifyResult && verifyResult.length > 0) {
@@ -32,14 +32,16 @@ async function verifyCredentials(username, password) {
     delete staffData.password;
     return staffData;
   } else {
-    throw (STAFF_ERROR.USERNAME_OR_PASSWORD_NOT_MATCH);
+    throw STAFF_ERROR.USERNAME_OR_PASSWORD_NOT_MATCH;
   }
 }
 
 async function changeStaffPassword(staffData, newPassword) {
   let newHashPassword = hashPassword(newPassword);
 
-  let result = await StaffResourceAccess.updateById(staffData.id, { password: newHashPassword });
+  let result = await StaffResourceAccess.updateById(staffData.id, {
+    password: newHashPassword,
+  });
 
   if (result) {
     return result.id;
@@ -50,28 +52,28 @@ async function changeStaffPassword(staffData, newPassword) {
 
 async function createNewStaff(staffData, newPassword) {
   //check existed username
-  let _existedUsers = await StaffResourceAccess.find({ username: staffData.username });
+  let _existedUsers = await StaffResourceAccess.find({
+    username: staffData.username,
+  });
   if (_existedUsers && _existedUsers.length > 0) {
-    console.log('user');
-    throw (STAFF_ERROR.DUPLICATED_USER);
+    console.log("user");
+    throw STAFF_ERROR.DUPLICATED_USER;
   }
 
   //check existed email
   if (staffData.email) {
     _existedUsers = await StaffResourceAccess.find({ email: staffData.email });
     if (_existedUsers && _existedUsers.length > 0) {
-      console.log('email');
-      throw (STAFF_ERROR.DUPLICATED_USER_EMAIL);
+      console.log("email");
+      throw STAFF_ERROR.DUPLICATED_USER_EMAIL;
     }
   }
 
   //check existed phoneNumber
   if (staffData.phone) {
-    console.log(staffData.phone)
     _existedUsers = await StaffResourceAccess.find({ phone: staffData.phone });
     if (_existedUsers && _existedUsers.length > 0) {
-      console.log('phone');
-      throw (STAFF_ERROR.DUPLICATED_USER_PHONE);
+      throw STAFF_ERROR.DUPLICATED_USER_PHONE;
     }
   }
 
@@ -94,7 +96,7 @@ async function verifyBeforeUpdate(staffId, staffData) {
   let data;
   if (staffData.email) {
     data = await StaffResourceAccess.find({
-      email: staffData.email
+      email: staffData.email,
     });
     if (data && data.length > 0) {
       if (data[0].id !== staffId) {
@@ -105,7 +107,7 @@ async function verifyBeforeUpdate(staffId, staffData) {
 
   if (staffData.phone) {
     data = await StaffResourceAccess.find({
-      phone: staffData.phone
+      phone: staffData.phone,
     });
 
     if (data && data.length > 0) {
@@ -124,5 +126,5 @@ module.exports = {
   unhashPassword,
   hashPassword,
   createNewStaff,
-  verifyBeforeUpdate
-}
+  verifyBeforeUpdate,
+};

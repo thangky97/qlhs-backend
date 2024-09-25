@@ -1,21 +1,21 @@
-const Course = require("./CourseRoute");
+const Semester = require("./SemesterRoute");
 
 module.exports = [
   {
     method: "POST",
-    path: "/course/update",
-    options: Course.updateById,
+    path: "/semester/update",
+    options: Semester.updateById,
   },
   // {
   //   method: "POST",
-  //   path: "/course/delete",
-  //   options: Course.deleteById,
+  //   path: "/semester/delete",
+  //   options: Semester.deleteById,
   // },
-  { method: "POST", path: "/course/get-list", options: Course.find },
-  { method: "POST", path: "/course/insert", options: Course.insert },
+  { method: "POST", path: "/semester/get-list", options: Semester.find },
+  { method: "POST", path: "/semester/insert", options: Semester.insert },
   {
     method: "GET",
-    path: "/course/get-detail",
-    options: Course.findById,
+    path: "/semester/get-detail",
+    options: Semester.findById,
   },
 ];

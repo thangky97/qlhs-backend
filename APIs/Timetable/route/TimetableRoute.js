@@ -1,28 +1,41 @@
 "use strict";
-const moduleName = "Course";
+const moduleName = "Timetable";
 const Manager = require(`../manager/${moduleName}Manager`);
 const Joi = require("joi");
 const Response = require("../../Common/route/response").setup(Manager);
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 const insertSchema = {
-  code: Joi.string(),
-  name: Joi.string(),
-  description: Joi.string(),
-  status: Joi.number().valid(0, 1).default(1).required(),
+  staffId: Joi.number(),
+  courseId: Joi.number(),
+  lesson: Joi.string().allow(null),
+  date: Joi.string().allow(null),
+  classroomId: Joi.number().allow(null),
+  semesterId: Joi.number(),
+  practice_hours: Joi.string().allow(null),
+  theory_hours: Joi.string().allow(null),
+  curriculumSectionId: Joi.number(),
 };
 
 const updateSchema = {
-  code: Joi.string(),
-  name: Joi.string(),
-  description: Joi.string(),
-  status: Joi.number().valid(0, 1).default(1).required(),
+  staffId: Joi.number(),
+  courseId: Joi.number(),
+  lesson: Joi.string().allow(null),
+  date: Joi.string().allow(null),
+  classroomId: Joi.number().allow(null),
+  semesterId: Joi.number(),
+  practice_hours: Joi.string().allow(null),
+  theory_hours: Joi.string().allow(null),
+  curriculumSectionId: Joi.number(),
 };
 
 const filterSchema = {
-  code: Joi.string(),
-  name: Joi.string(),
-  status: Joi.number().valid(0, 1),
+  staffId: Joi.number(),
+  courseId: Joi.number(),
+  lesson: Joi.string().allow(null),
+  classroomId: Joi.number(),
+  semesterId: Joi.number(),
+  curriculumSectionId: Joi.number(),
 };
 
 module.exports = {

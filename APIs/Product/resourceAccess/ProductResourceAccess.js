@@ -88,6 +88,10 @@ async function customFind(filter, skip, limit, orderBy, searchText) {
         where: { ...joinQueryLang },
         required: false,
       },
+      {
+        model: db.department,
+        required: true,
+      },
     ],
   });
 
@@ -157,18 +161,21 @@ async function customGetDetail(id, lang) {
       {
         model: DB["curriculum_sections"],
         as: "sections",
-        // where: { lang: lang, status: 1 },
         where: { lang: lang },
         required: false,
         include: [
-          {
-            model: DB.course,
-            as: "course",
-          },
+          // {
+          //   model: DB.course,
+          //   as: "course",
+          // },
           {
             model: DB.staff,
           },
         ],
+      },
+      {
+        model: DB.department,
+        required: false,
       },
     ],
   });
@@ -196,14 +203,6 @@ async function customGetDetailusercourse(id, lang, usersId) {
     where: {
       id: id,
     },
-    include: [
-      {
-        model: DB.courseprogresses,
-        where: { lang: lang, usersId: usersId, productId: id, status: 1 },
-        as: "course_progress",
-        required: false,
-      },
-    ],
   });
 }
 

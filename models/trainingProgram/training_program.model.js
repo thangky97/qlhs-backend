@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 module.exports = (sequelize) => {
-  const DepartmentSchema = sequelize.define(
-    "departments",
+  const TrainingProgramSchema = sequelize.define(
+    "training_programs",
     {
       code: {
         type: Sequelize.STRING,
@@ -15,10 +15,6 @@ module.exports = (sequelize) => {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      trainingProgramId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
       status: {
         type: Sequelize.INTEGER(1),
         allowNull: false,
@@ -30,5 +26,5 @@ module.exports = (sequelize) => {
       timestamps: true,
     }
   );
-  return DepartmentSchema;
+  return TrainingProgramSchema;
 };

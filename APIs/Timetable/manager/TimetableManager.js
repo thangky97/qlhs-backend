@@ -1,7 +1,7 @@
 "use strict";
-const CourseResourceAccess = require("../resourceAccess/CourseResourceAccess");
+const TimetableResourceAccess = require("../resourceAccess/TimetableResourceAccess");
 const Logger = require("../../../utils/logging");
-const { STAFF_ROLE } = require("../CourseConstant");
+const { STAFF_ROLE } = require("../TimetableConstant");
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 async function insert(req) {
@@ -10,19 +10,17 @@ async function insert(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_STAFF
         )) == false
       ) {
         reject("NOT_ALLOWED");
         return;
       }
-      let courseData = req.payload;
+      let timetableData = req.payload;
 
-      //create new user
-      let addResult = await CourseResourceAccess.insert(courseData);
+      let addResult = await TimetableResourceAccess.insert(timetableData);
       if (addResult === undefined) {
-        reject("can not insert course");
+        reject("can not insert timetable");
         return;
       } else {
         resolve(addResult);
@@ -40,8 +38,7 @@ async function find(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_STAFF
         )) == false
       ) {
         reject("NOT_ALLOWED");
@@ -56,19 +53,19 @@ async function find(req) {
         filter = {};
       }
 
-      let courses = await CourseResourceAccess.customFind(
+      let timetables = await TimetableResourceAccess.customFind(
         filter,
         skip,
         limit,
         order
       );
 
-      if (courses && courses.length > 0) {
-        let CourseCount = await CourseResourceAccess.count(filter, [
+      if (timetables && timetables.length > 0) {
+        let timetableCount = await TimetableResourceAccess.count(filter, [
           order.key,
           order.value,
         ]);
-        resolve({ data: courses, total: CourseCount });
+        resolve({ data: timetables, total: timetableCount });
       } else {
         resolve({ data: [], total: 0 });
       }
@@ -88,7 +85,7 @@ async function getList(req) {
       let order = req.payload.order;
       let searchText = filter.name;
       delete filter.name;
-      let data = await CourseResourceAccess.customFind(
+      let data = await TimetableResourceAccess.customFind(
         filter,
         skip,
         limit,
@@ -96,7 +93,7 @@ async function getList(req) {
         searchText
       );
       if (data && data.length > 0) {
-        let count = await CourseResourceAccess.customCount(filter);
+        let count = await TimetableResourceAccess.customCount(filter);
         resolve({ data: data, total: count });
       } else {
         resolve({ data: [], total: 0 });
@@ -113,20 +110,19 @@ async function updateById(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_STAFF
         )) == false
       ) {
         reject("NOT_ALLOWED");
         return;
       }
 
-      let courrseId = req.payload.id;
-      let courseData = req.payload.data;
+      let timetableId = req.payload.id;
+      let timetableData = req.payload.data;
 
-      let updateResult = await CourseResourceAccess.updateById(
-        courrseId,
-        courseData
+      let updateResult = await TimetableResourceAccess.updateById(
+        timetableId,
+        timetableData
       );
 
       if (updateResult) {
@@ -134,7 +130,7 @@ async function updateById(req) {
         resolve(updateResult);
       }
 
-      reject("failed to update course");
+      reject("failed to update timetable");
     } catch (e) {
       Logger.error(__filename + e);
       reject(e);
@@ -147,19 +143,21 @@ async function findById(req) {
       if (
         (await CommonFunctions.verifyRole(
           req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
+          STAFF_ROLE.MANAGE_STAFF
         )) == false
       ) {
         reject("NOT_ALLOWED");
         return;
       }
-      let course = await CourseResourceAccess.findById(req.query.id, "id");
-      if (course) {
-        delete course.password;
-        resolve(course);
+      let timetable = await TimetableResourceAccess.findById(
+        req.query.id,
+        "id"
+      );
+      if (timetable) {
+        delete timetable.password;
+        resolve(timetable);
       }
-      reject("Not found course");
+      reject("Not found timetable");
     } catch (e) {
       Logger.error(__filename, e);
       reject("failed");

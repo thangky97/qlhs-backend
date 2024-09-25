@@ -2,7 +2,7 @@
 const db = require("../../../models");
 const CommonResouceFunctions = require("../../Common/resourceAccess/CommonResourceAccess");
 
-const tableName = "department";
+const tableName = "semester";
 
 async function insert(data) {
   return await CommonResouceFunctions.insert(tableName, data);
@@ -25,8 +25,14 @@ async function find(filter, skip, limit, order) {
 async function findById(id, key) {
   const include = [
     {
-      model: db.training_programs,
+      model: db.product,
       required: false,
+      include: [
+        {
+          model: db.product_name,
+          required: false,
+        },
+      ],
     },
   ];
   return await CommonResouceFunctions.findById(tableName, key, id, include);
@@ -51,22 +57,26 @@ async function customFind(filter, skip, limit, order) {
     };
   }
 
-  let queryBuilder = await db[tableName].findAll({
-    where: query,
+  return await db[tableName].findAll({
     limit: limit,
     offset: skip,
     order: order.map((item) => {
       return [item.key, item.value];
     }),
+    where: query,
     include: [
       {
-        model: db.training_programs,
+        model: db.product,
         required: false,
+        include: [
+          {
+            model: db.product_name,
+            required: false,
+          },
+        ],
       },
     ],
   });
-
-  return queryBuilder;
 }
 
 module.exports = {

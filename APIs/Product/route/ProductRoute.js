@@ -25,6 +25,7 @@ const insertSchema = {
   sort_product_description: Joi.string().allow(""),
   open: Joi.number().valid(0, 1).default(0),
   is_monitor: Joi.number().valid(0, 1).required(),
+  departmentId: Joi.number().allow(null),
 };
 
 const filterSchema = {
@@ -36,6 +37,7 @@ const filterSchema = {
   service_type: Joi.string().valid("local", "cloud"),
   is_monitor: Joi.number().valid(0, 1),
   product_type: Joi.number().valid(0, 1, 2, 3),
+  departmentId: Joi.number().allow(null),
 };
 
 const updateSchema = {
@@ -58,49 +60,7 @@ const updateSchema = {
   sort_product_description: Joi.string().allow(""),
   open: Joi.number().valid(0, 1).default(0),
   is_monitor: Joi.number().valid(0, 1).required(),
-};
-
-const buySchema = {
-  product_id: Joi.number().required(),
-  phone: Joi.string().allow(""),
-  user_payment: Joi.string().required(),
-  service: Joi.string().valid("local", "cloud").required(),
-  payment_type: Joi.string().required(),
-  type: Joi.string().valid("new_order", "extend").required(),
-  note: Joi.string().allow(""),
-  trial_type: Joi.string().allow(""),
-  startDate: Joi.string().allow(""),
-  endDate: Joi.string().allow(""),
-  company_name: Joi.string(),
-  zip_code: Joi.string().required(),
-  total_product: Joi.number().required(),
-  product_type: Joi.number().required(),
-  product_price_type: Joi.number().valid(0, 1, 2, 3).required(),
-  email: Joi.string().allow(""),
-  lang: Joi.string().required(),
-  address: Joi.string().required(),
-  transactionId: Joi.number(),
-};
-
-const extendSchema = {
-  transactionId: Joi.number(),
-  time: Joi.number().required(),
-  payment_type: Joi.string().required(),
-  note: Joi.string().required(),
-  lang: Joi.string().required(),
-};
-
-const updateTransactionSchema = {
-  transactionId: Joi.number().required(),
-  price: Joi.number(),
-  product_id: Joi.number(),
-  time: Joi.number(),
-  payment_type: Joi.string(),
-  type: Joi.string().valid("new_order", "extend"),
-  status: Joi.string().valid("pending", "paid", "failed"),
-  discount: Joi.number(),
-  payment_money: Joi.number(),
-  total_money: Joi.number(),
+  departmentId: Joi.number().allow(null),
 };
 
 module.exports = {
@@ -343,70 +303,6 @@ module.exports = {
     },
   },
 
-  buy: {
-    tags: ["api", `${moduleName}`],
-    description: `insert ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      failAction: async (request, h, err) => {
-        if (process.env.NODE_ENV === "production") {
-          // In prod, log a limited error message and throw the default Bad Request error.
-          console.error("ValidationError:", err.message);
-          throw Boom.badRequest(`Invalid request payload input`);
-        } else {
-          // During development, log and respond with the full error.
-          console.error(err);
-          throw err;
-        }
-      },
-      payload: Joi.array().items(buySchema),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "buy");
-    },
-  },
-  buyService: {
-    tags: ["api", `${moduleName}`],
-    description: `insert ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      failAction: async (request, h, err) => {
-        if (process.env.NODE_ENV === "production") {
-          // In prod, log a limited error message and throw the default Bad Request error.
-          console.error("ValidationError:", err.message);
-          throw Boom.badRequest(`Invalid request payload input`);
-        } else {
-          // During development, log and respond with the full error.
-          console.error(err);
-          throw err;
-        }
-      },
-      payload: Joi.object({
-        userTokenId: Joi.number().required(),
-        fromdate: Joi.string().required(),
-        enddate: Joi.string().required(),
-        status: Joi.number().valid(0, 1, 2),
-        product_id: Joi.number().required(),
-        product_price_type: Joi.number().valid(0, 1, 2, 3).required(),
-        lang: Joi.string().required(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "buyService");
-    },
-  },
   getDiscount: {
     tags: ["api", `${moduleName}`],
     description: `get detail ${moduleName}`,
@@ -426,209 +322,6 @@ module.exports = {
     },
     handler: async function (req, res) {
       return await Response(req, res, "getDiscount");
-    },
-  },
-  myService: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      query: Joi.object({
-        product_id: Joi.number(),
-        service: Joi.string().valid("local", "cloud"),
-        status: Joi.number().valid(0, 1),
-        language: Joi.string(),
-        order: Joi.string().default("expiredAt DESC"),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "myService");
-    },
-  },
-  getTransactionDetail: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      failAction: async (request, h, err) => {
-        if (process.env.NODE_ENV === "production") {
-          // In prod, log a limited error message and throw the default Bad Request error.
-          console.error("ValidationError:", err.message);
-          throw Boom.badRequest(`Invalid request payload input`);
-        } else {
-          // During development, log and respond with the full error.
-          console.error(err);
-          throw err;
-        }
-      },
-      query: Joi.object({
-        id: Joi.number().min(0),
-        // lang: Joi.string(),
-      }),
-      payload: Joi.object({
-        lang: Joi.string(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "gettransactiondetail");
-    },
-  },
-
-  getTransactionCloudDetail: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      failAction: async (request, h, err) => {
-        if (process.env.NODE_ENV === "production") {
-          // In prod, log a limited error message and throw the default Bad Request error.
-          console.error("ValidationError:", err.message);
-          throw Boom.badRequest(`Invalid request payload input`);
-        } else {
-          // During development, log and respond with the full error.
-          console.error(err);
-          throw err;
-        }
-      },
-      query: Joi.object({
-        id: Joi.number().min(0),
-        // lang: Joi.string(),
-      }),
-      payload: Joi.object({
-        lang: Joi.string(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "gettransactionclouddetail");
-    },
-  },
-
-  getTransactions: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      failAction: async (request, h, err) => {
-        if (process.env.NODE_ENV === "production") {
-          // In prod, log a limited error message and throw the default Bad Request error.
-          console.error("ValidationError:", err.message);
-          throw Boom.badRequest(`Invalid request payload input`);
-        } else {
-          // During development, log and respond with the full error.
-          console.error(err);
-          throw err;
-        }
-      },
-      query: Joi.object({
-        id: Joi.number().min(0),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "userGetTransactions");
-    },
-  },
-  geAlltTransactions: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyStaffToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      failAction: async (request, h, err) => {
-        if (process.env.NODE_ENV === "production") {
-          // In prod, log a limited error message and throw the default Bad Request error.
-          console.error("ValidationError:", err.message);
-          throw Boom.badRequest(`Invalid request payload input`);
-        } else {
-          // During development, log and respond with the full error.
-          console.error(err);
-          throw err;
-        }
-      },
-      payload: Joi.object({
-        filter: Joi.object({
-          status: Joi.string(),
-          payment_type: Joi.string(),
-          product_id: Joi.number(),
-          user_payment: Joi.string(),
-          type: Joi.number(),
-          lang: Joi.string(),
-        }),
-        searchUser: Joi.string(),
-        skip: Joi.number().default(0).min(0),
-        limit: Joi.number().max(100),
-        startDate: Joi.date().iso(),
-        endDate: Joi.date().iso(),
-        order: Joi.object({
-          key: Joi.string().default("id").allow(""),
-          value: Joi.string().default("DESC").allow(""),
-        }),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "getTransactions");
-    },
-  },
-  updateTransaction: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyStaffToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      payload: Joi.object(updateTransactionSchema),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "updateTransaction");
-    },
-  },
-  extend: {
-    tags: ["api", `${moduleName}`],
-    description: `insert ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      payload: Joi.object(extendSchema),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "extend");
     },
   },
 
@@ -653,90 +346,6 @@ module.exports = {
     },
     handler: async function (req, res) {
       return await Response(req, res, "getPrice");
-    },
-  },
-  findDetailTransaction: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      query: Joi.object({
-        id: Joi.number(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "getDetailTransaction");
-    },
-  },
-  checkBuy: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      payload: Joi.object({
-        id: Joi.number().required(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "checkBuy");
-    },
-  },
-  getAllTransactionsToken: {
-    tags: ["api", `${moduleName}`],
-    description: `get detail ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyStaffToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      failAction: async (request, h, err) => {
-        if (process.env.NODE_ENV === "production") {
-          // In prod, log a limited error message and throw the default Bad Request error.
-          console.error("ValidationError:", err.message);
-          throw Boom.badRequest(`Invalid request payload input`);
-        } else {
-          // During development, log and respond with the full error.
-          console.error(err);
-          throw err;
-        }
-      },
-      payload: Joi.object({
-        filter: Joi.object({
-          status: Joi.string(),
-          payment_type: Joi.string(),
-          product_id: Joi.number(),
-          user_payment: Joi.string(),
-          type: Joi.number(),
-          lang: Joi.string(),
-        }),
-        searchUser: Joi.string(),
-        skip: Joi.number().default(0).min(0),
-        limit: Joi.number().max(100),
-        startDate: Joi.date().iso(),
-        endDate: Joi.date().iso(),
-        order: Joi.object({
-          key: Joi.string().default("id").allow(""),
-          value: Joi.string().default("DESC").allow(""),
-        }),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "getTransactionsToken");
     },
   },
 };

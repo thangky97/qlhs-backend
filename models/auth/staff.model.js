@@ -34,7 +34,23 @@ module.exports = (sequelize) => {
       type: Sequelize.INTEGER(1),
       allowNull: false,
       defaultValue: 1,
-      comment: "0 : deactive, 1 active, 2 : blocked",
+      comment: "0 : deactive, 1 active, 2 : tham gia, 3: chua tham gia",
+    },
+    position: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    departmentId: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
+    curriculumSectionId: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
+    avatar: {
+      type: Sequelize.STRING(500),
+      allowNull: true,
     },
   });
 

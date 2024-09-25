@@ -81,6 +81,10 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: "vn",
     },
+    departmentId: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
   });
 
   return ProductSchema;

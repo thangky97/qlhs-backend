@@ -23,13 +23,7 @@ async function find(filter, skip, limit, order) {
 }
 
 async function findById(id, key) {
-  const include = [
-    {
-      model: db.product,
-      as: "product",
-    },
-  ];
-  return await CommonResouceFunctions.findById(tableName, key, id, include);
+  return await CommonResouceFunctions.findById(tableName, key, id);
 }
 async function getMaxPriorityIndex() {
   return await db[tableName].findOne({
@@ -40,13 +34,7 @@ async function getMaxPriorityIndex() {
   });
 }
 async function customGetDetail(id, key) {
-  const include = [
-    // {
-    //   model: db.product,
-    //   as: "products",
-    // },
-  ];
-  return await CommonResouceFunctions.findById(tableName, key, id, include);
+  return await CommonResouceFunctions.findById(tableName, key, id);
 }
 async function count(filter, order) {
   return await CommonResouceFunctions.count(tableName, filter, order);
@@ -72,13 +60,6 @@ async function customFind(filter, skip, limit, order) {
       return [item.key, item.value];
     }),
     where: query,
-    // raw: true,
-    include: [
-      {
-        model: db.product,
-        as: "product",
-      },
-    ],
   });
 }
 async function deleteById(id) {

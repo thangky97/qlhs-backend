@@ -3,6 +3,10 @@ module.exports = (sequelize) => {
   const CourseSchema = sequelize.define(
     "courses",
     {
+      code: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: true,

@@ -1,5 +1,5 @@
 "use strict";
-const moduleName = "Course";
+const moduleName = "TrainingProgram";
 const Manager = require(`../manager/${moduleName}Manager`);
 const Joi = require("joi");
 const Response = require("../../Common/route/response").setup(Manager);

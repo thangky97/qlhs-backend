@@ -23,14 +23,7 @@ async function find(filter, skip, limit, order) {
 }
 
 async function findById(id, key) {
-  const include = [
-    {
-      model: db.users,
-      as: "user",
-    },
-  ];
-
-  return await CommonResouceFunctions.findById(tableName, key, id, include);
+  return await CommonResouceFunctions.findById(tableName, key, id);
 }
 async function customGetDetail(id, key) {
   return await CommonResouceFunctions.findById(tableName, key, id);

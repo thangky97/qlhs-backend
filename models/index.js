@@ -35,7 +35,6 @@ db.partner = require("./cms/partner/partner.model")(sequelize, Sequelize);
 //auth
 db.users = require("./auth/user.model")(sequelize, Sequelize);
 db.staff = require("./auth/staff.model")(sequelize, Sequelize);
-db.role = require("./auth/role.model")(sequelize, Sequelize);
 
 //product
 db.product = require("./product/product.model")(sequelize, Sequelize);
@@ -53,17 +52,6 @@ db.democloudapplications = require("./demoCloud/demo-cloud-application.model")(
 //course
 db.course = require("./course/course.model")(sequelize, Sequelize);
 
-//user_token
-db.user_tokens = require("./auth/user_token.model")(sequelize, Sequelize);
-db.userTokenDetails = require("./auth/user_token_detail.model")(
-  sequelize,
-  Sequelize
-);
-db.user_training_historys = require("./auth/user_training_history.model")(
-  sequelize,
-  Sequelize
-);
-
 //document
 db.document = require("./document/document.model")(sequelize, Sequelize);
 db.document_label = require("./document/doc-label.model")(sequelize, Sequelize);
@@ -72,38 +60,16 @@ db.document_content = require("./document/doc-content.model")(
   Sequelize
 );
 
-//curriculum
-db.courseprogresses = require("./curriculum/course-progress.model")(
-  sequelize,
-  Sequelize
-);
 db.curriculum_sections = require("./curriculum/curriculum-sections.model")(
   sequelize,
   Sequelize
 );
-db.user_quizs = require("./curriculum/user-quizs.model")(sequelize, Sequelize);
-db.transcripts = require("./curriculum/transcript.model")(sequelize, Sequelize);
 db.notifications = require("./notification/notification.model")(
   sequelize,
   Sequelize
 );
-db.usersectionprogress = require("./curriculum/usersectionprogress.model")(
-  sequelize,
-  Sequelize
-);
+
 db.course_documents = require("./curriculum/course-documents.model")(
-  sequelize,
-  Sequelize
-);
-db.curriculum_lectures_quizzes =
-  require("./curriculum/curriculum-lectures-quiz.model")(sequelize, Sequelize);
-db.schedule = require("./curriculum/schedule.model")(sequelize, Sequelize);
-//transaction
-db.users_product = require("./transaction/user_product.model")(
-  sequelize,
-  Sequelize
-);
-db.transaction = require("./transaction/transaction.model")(
   sequelize,
   Sequelize
 );
@@ -120,16 +86,24 @@ db.instructorslevels = require("./instructors/instruction_levels")(
   sequelize,
   Sequelize
 );
-//course
-db.coursevideoss = require("./coures/course_videos")(sequelize, Sequelize);
-db.coursefiles = require("./coures/course_files")(sequelize, Sequelize);
-db.courseratings = require("./coures/course_ratings")(sequelize, Sequelize);
 
 //classroom
 db.classroom = require("./classroom/classroom.model")(sequelize, Sequelize);
 
 //classroom
 db.department = require("./department/department.model")(sequelize, Sequelize);
+
+//training_programs - chương trình đào tạo
+db.training_programs = require("./trainingProgram/training_program.model")(
+  sequelize,
+  Sequelize
+);
+
+//timetable - thoi khoa bieu - lich hoc
+db.timetable = require("./timetable/timetable.model")(sequelize, Sequelize);
+
+//kì học
+db.semester = require("./semester/semester.model")(sequelize, Sequelize);
 
 //quan he
 db.product.hasMany(db.product_name, { foreignKey: "product_id" });
@@ -158,9 +132,63 @@ db.curriculum_sections.belongsTo(db.product, {
 });
 
 //quan he
-db.staff.hasMany(db.department, { as: "staff" });
-db.department.belongsTo(db.staff, {
-  foreignKey: "usersId",
+db.department.hasMany(db.staff, { as: "staff" });
+db.staff.belongsTo(db.department, {
+  foreignKey: "departmentId",
 });
+
+//quan he
+db.training_programs.hasMany(db.department, { as: "department" });
+db.department.belongsTo(db.training_programs, {
+  foreignKey: "trainingProgramId",
+});
+
+//quan he
+db.department.hasMany(db.product, { as: "product" });
+db.product.belongsTo(db.department, {
+  foreignKey: "departmentId",
+});
+
+//quan he
+db.product.hasMany(db.semester, { as: "semester" });
+db.semester.belongsTo(db.product, {
+  foreignKey: "productId",
+});
+
+//quan he
+db.curriculum_sections.hasMany(db.staff, { as: "staff_curriculum_section" });
+db.staff.belongsTo(db.curriculum_sections, {
+  foreignKey: "curriculumSectionId",
+});
+
+//quan he timetable
+db.staff.hasMany(db.timetable, { as: "timetable_staff" });
+db.timetable.belongsTo(db.staff, {
+  foreignKey: "staffId",
+});
+
+db.course.hasMany(db.timetable, { as: "timetable_course" });
+db.timetable.belongsTo(db.course, {
+  foreignKey: "courseId",
+});
+
+db.classroom.hasMany(db.timetable, { as: "timetable_classroom" });
+db.timetable.belongsTo(db.classroom, {
+  foreignKey: "classroomId",
+});
+
+db.semester.hasMany(db.timetable, { as: "timetable_semester" });
+db.timetable.belongsTo(db.semester, {
+  foreignKey: "semesterId",
+});
+
+db.curriculum_sections.hasMany(db.timetable, {
+  as: "timetable_curriculum_section",
+});
+db.timetable.belongsTo(db.curriculum_sections, {
+  foreignKey: "curriculumSectionId",
+});
+
+//end quan he timetable
 
 module.exports = db;

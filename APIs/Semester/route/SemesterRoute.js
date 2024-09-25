@@ -1,28 +1,23 @@
 "use strict";
-const moduleName = "Course";
+const moduleName = "Semester";
 const Manager = require(`../manager/${moduleName}Manager`);
 const Joi = require("joi");
 const Response = require("../../Common/route/response").setup(Manager);
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 const insertSchema = {
-  code: Joi.string(),
   name: Joi.string(),
-  description: Joi.string(),
-  status: Joi.number().valid(0, 1).default(1).required(),
+  productId: Joi.number(),
 };
 
 const updateSchema = {
-  code: Joi.string(),
   name: Joi.string(),
-  description: Joi.string(),
-  status: Joi.number().valid(0, 1).default(1).required(),
+  productId: Joi.number(),
 };
 
 const filterSchema = {
-  code: Joi.string(),
   name: Joi.string(),
-  status: Joi.number().valid(0, 1),
+  productId: Joi.number(),
 };
 
 module.exports = {

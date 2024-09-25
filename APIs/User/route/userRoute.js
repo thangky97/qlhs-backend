@@ -69,24 +69,7 @@ module.exports = {
       return await Response(req, res, "insert");
     },
   },
-  insertTrainingHistory: {
-    tags: ["api", `${moduleName}`],
-    description: `register ${moduleName}`,
-    validate: {
-      payload: Joi.object({
-        userId: Joi.number(),
-        courseId: Joi.number(),
-        cloudServiceId: Joi.number().allow(null),
-        training_type: Joi.number(),
-        duration: Joi.number(),
-        start: Joi.string(),
-        end: Joi.string(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "insertTrainingHistory");
-    },
-  },
+
   insertUsertoken: {
     tags: ["api", `${moduleName}`],
     description: `register ${moduleName}`,
@@ -371,33 +354,7 @@ module.exports = {
       return await Response(req, res, "findUserToken");
     },
   },
-  findTrainingHistory: {
-    tags: ["api", `${moduleName}`],
-    description: `get list ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      payload: Joi.object({
-        filter: Joi.object(filterTrainingHistorySchema),
-        skip: Joi.number().default(0).min(0),
-        limit: Joi.number().max(100),
-        order: Joi.array().items(
-          Joi.object({
-            key: Joi.string(),
-            value: Joi.string(),
-          })
-        ),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "findTrainingHistory");
-    },
-  },
+
   find: {
     tags: ["api", `${moduleName}`],
     description: `get list ${moduleName}`,
@@ -459,27 +416,6 @@ module.exports = {
     },
     handler: async function (req, res) {
       return await Response(req, res, "tokenDetailById");
-    },
-  },
-
-  getTrainingHistoryDetail: {
-    tags: ["api", `${moduleName}`],
-    description: `find by id ${moduleName}`,
-    pre: [{ method: CommonFunctions.verifyStaffToken }],
-    auth: {
-      strategy: "jwt",
-    },
-    validate: {
-      headers: Joi.object({
-        authorization: Joi.string(),
-      }).unknown(),
-      query: Joi.object({
-        userId: Joi.number(),
-        productId: Joi.number(),
-      }),
-    },
-    handler: async function (req, res) {
-      return await Response(req, res, "getTrainingHistoryDetail");
     },
   },
 

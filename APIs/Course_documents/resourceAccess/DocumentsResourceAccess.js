@@ -30,22 +30,10 @@ async function getMaxPriorityIndex() {
   });
 }
 async function findById(id, key) {
-  // const include = [
-  //   {
-  //     model: db.curriculum_lectures_quizzes,
-  //     as: "lectures_quizs",
-  //   },
-  // ];
   return await CommonResouceFunctions.findById(tableName, key, id);
 }
 async function customGetDetail(id, key) {
-  const include = [
-    // {
-    //   model: db.product,
-    //   as: "products",
-    // },
-  ];
-  return await CommonResouceFunctions.findById(tableName, key, id, include);
+  return await CommonResouceFunctions.findById(tableName, key, id);
 }
 async function count(filter, order) {
   return await CommonResouceFunctions.count(tableName, filter, order);

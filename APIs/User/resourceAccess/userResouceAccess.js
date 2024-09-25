@@ -60,47 +60,6 @@ async function findUserToken(
       return [item.key, item.value];
     }),
     where: query,
-    include: [
-      {
-        model: DB.product,
-        include: [
-          {
-            model: DB.product_name,
-          },
-        ],
-      },
-      {
-        model: DB.users,
-        where: queryNameUser,
-      },
-    ],
-  });
-}
-
-async function findTrainingHistory(filter, skip, limit, order) {
-  let query = filter;
-  let queryProductName = {};
-
-  const queryFindAll = limit
-    ? {
-        limit: limit,
-      }
-    : {};
-
-  if (filter.courseName) {
-    queryProductName.name = {
-      [DB.Sequelize.Op.like]: `%${filter.courseName}%`,
-    };
-  }
-  delete query.courseName;
-
-  return await DB.user_training_historys.findAll({
-    ...queryFindAll,
-    offset: skip,
-    order: order.map((item) => {
-      return [item.key, item.value];
-    }),
-    where: query,
   });
 }
 
@@ -190,5 +149,4 @@ module.exports = {
   updateUserToken,
   customUserTokenCount,
   findUserToken,
-  findTrainingHistory,
 };

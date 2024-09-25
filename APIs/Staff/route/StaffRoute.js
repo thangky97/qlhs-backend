@@ -12,8 +12,12 @@ const insertSchema = {
   email: Joi.string().email().max(125).required(),
   password: Joi.string().required(),
   phone: Joi.string().max(25).required(),
-  status: Joi.number().valid(0, 1, 2).default(1),
+  status: Joi.number().valid(0, 1, 2, 3).default(1),
   role: Joi.string(),
+  position: Joi.string().allow(null),
+  departmentId: Joi.number().allow(null),
+  curriculumSectionId: Joi.number().allow(null),
+  avatar: Joi.string().allow(null),
 };
 
 const updateSchema = {
@@ -22,8 +26,12 @@ const updateSchema = {
   phone: Joi.string(),
   role: Joi.string(),
   email: Joi.string().email(),
-  status: Joi.number().valid(0, 1, 2),
+  status: Joi.number().valid(0, 1, 2, 3),
   role: Joi.string(),
+  position: Joi.string().allow(null),
+  departmentId: Joi.number().allow(null),
+  curriculumSectionId: Joi.number().allow(null),
+  avatar: Joi.string().allow(null),
 };
 
 const filterSchema = {
@@ -36,7 +44,9 @@ const filterSchema = {
     Joi.array().items(Joi.string()) // Hoặc là một mảng các chuỗi
   ),
   email: Joi.string().email(),
-  status: Joi.number().valid(0, 1, 2),
+  status: Joi.number().valid(0, 1, 2, 3),
+  departmentId: Joi.number().allow(null),
+  curriculumSectionId: Joi.number().allow(null),
 };
 
 module.exports = {
@@ -51,6 +61,17 @@ module.exports = {
       headers: Joi.object({
         authorization: Joi.string(),
       }).unknown(),
+      failAction: async (request, h, err) => {
+        if (process.env.NODE_ENV === "production") {
+          // In prod, log a limited error message and throw the default Bad Request error.
+          console.error("ValidationError:", err.message);
+          throw Boom.badRequest(`Invalid request payload input`);
+        } else {
+          // During development, log and respond with the full error.
+          console.error(err);
+          throw err;
+        }
+      },
       payload: Joi.object({
         ...insertSchema,
         roleId: Joi.number().default(2).not(1),

@@ -90,18 +90,6 @@ async function insertUsertoken(req) {
   });
 }
 
-async function insertTrainingHistory(req) {
-  try {
-    const result = await DB.user_training_historys.create(req.payload);
-    if (result) {
-      return result;
-    } else {
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 async function updateTokenuser(req) {
   console.log("reqsss", req.payload.data.usersId);
   return new Promise(async (resolve, reject) => {
@@ -185,34 +173,6 @@ async function getUsertoken(req) {
       where: {
         userId: req.currentUser.id,
       },
-      include: [
-        {
-          model: DB["product"],
-          required: false,
-          include: [
-            {
-              model: DB.product_name,
-            },
-            {
-              model: DB.product_description,
-            },
-            {
-              model: DB.democloudapplications,
-              as: "democloudapplications",
-            },
-          ],
-        },
-
-        {
-          model: DB["userTokenDetails"], // Sử dụng model userTokenDetails đã định nghĩa trong Sequelize
-          as: "userTokenDetails", // Dùng as đã định nghĩa trong mối quan hệ
-          include: [
-            {
-              model: DB.transaction,
-            },
-          ],
-        },
-      ],
     });
 
     return userToken;
@@ -305,32 +265,6 @@ async function findUserToken(req) {
   });
 }
 
-async function findTrainingHistory(req) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let filter = req.payload.filter;
-      let skip = req.payload.skip;
-      let limit = req.payload.limit;
-      let order = req.payload.order;
-      let users = await UserResource.findTrainingHistory(
-        filter,
-        skip,
-        limit,
-        order
-      );
-      if (users && users.length > 0) {
-        // let usersCount = await UserResource.customUserTokenCount(filter);
-        resolve({ data: users });
-      } else {
-        resolve({ data: [], total: 0 });
-      }
-    } catch (e) {
-      Logger.error(__filename + e);
-      reject("failed");
-    }
-  });
-}
-
 async function findTokenbyid(req) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -338,12 +272,6 @@ async function findTokenbyid(req) {
         where: {
           id: req.query.id,
         },
-        include: [
-          {
-            model: DB.userTokenDetails,
-            as: "userTokenDetails",
-          },
-        ],
       });
       console.log("users", user);
       if (user) {
@@ -799,53 +727,6 @@ async function getDetailById(req) {
   });
 }
 
-async function getTrainingHistoryDetail(req) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let user = await DB.user_training_historys.findAll({
-        where: {
-          userId: req.query.userId,
-          courseId: req.query.productId,
-        },
-        include: [
-          {
-            model: DB.product,
-            as: "course",
-            include: [
-              {
-                model: DB.product_name,
-              },
-            ],
-          },
-          {
-            model: DB.product,
-            as: "cloudService",
-            include: [
-              {
-                model: DB.product_name,
-              },
-            ],
-          },
-          {
-            model: DB.curriculum_sections,
-          },
-          {
-            model: DB.users,
-          },
-        ],
-      });
-      if (user) {
-        resolve(user);
-      } else {
-        resolve({});
-      }
-    } catch (e) {
-      Logger.error(__filename, e);
-      reject("failed");
-    }
-  });
-}
-
 module.exports = {
   insert,
   find,
@@ -871,8 +752,5 @@ module.exports = {
   updateTokendetail,
   removeTokenDetail,
   tokenDetailById,
-  insertTrainingHistory,
-  findTrainingHistory,
-  getTrainingHistoryDetail,
   updateTokenDetailUsageCount,
 };

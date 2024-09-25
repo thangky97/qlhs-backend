@@ -92,22 +92,6 @@ async function customFind(filter, limit, skip, startDate, endDate) {
         [Op.between]: [startDate, endDate],
       },
     },
-    include: [
-      {
-        model: DB.m_intersection,
-        required: true,
-        attributes: ["Intersection_name"],
-      },
-      {
-        model: DB.m_camera,
-        require: false,
-        attributes: ["IP_Address"],
-        where: {
-          Intersection_ID: filter.Intersection_ID,
-          is_deleted: 0,
-        },
-      },
-    ],
   });
 
   return queryBuilder;
@@ -147,23 +131,6 @@ async function customeCount(filter, startDate, endDate) {
         [Op.between]: [startDate, endDate],
       },
     },
-
-    include: [
-      {
-        model: DB.m_intersection,
-        required: true,
-        attributes: ["Intersection_name"],
-      },
-      {
-        model: DB.m_camera,
-        require: false,
-        attributes: ["IP_Address"],
-        where: {
-          Intersection_ID: filter.Intersection_ID,
-          is_deleted: 0,
-        },
-      },
-    ],
   });
 
   return queryBuilder;
@@ -177,22 +144,6 @@ async function findAll(filter) {
         [Op.between]: [filter.startDate, filter.endDate],
       },
     },
-    include: [
-      {
-        model: DB.m_intersection,
-        required: true,
-        attributes: ["Intersection_name"],
-      },
-      {
-        model: DB.m_camera,
-        require: false,
-        attributes: ["IP_Address"],
-        where: {
-          Intersection_ID: filter.Intersection_ID,
-          is_deleted: 0,
-        },
-      },
-    ],
     raw: true,
   });
 

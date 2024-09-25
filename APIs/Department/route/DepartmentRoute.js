@@ -6,25 +6,24 @@ const Response = require("../../Common/route/response").setup(Manager);
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 const insertSchema = {
-  position: Joi.string(),
+  code: Joi.string(),
   name: Joi.string(),
-  usersId: Joi.number(),
   description: Joi.string(),
+  trainingProgramId: Joi.number(),
   status: Joi.number().valid(0, 1).default(1).required(),
 };
 
 const updateSchema = {
-  position: Joi.string(),
+  code: Joi.string(),
   name: Joi.string(),
-  usersId: Joi.number(),
   description: Joi.string(),
+  trainingProgramId: Joi.number(),
   status: Joi.number().valid(0, 1).default(1).required(),
 };
 
 const filterSchema = {
-  position: Joi.string(),
   name: Joi.string(),
-  usersId: Joi.number().allow(null),
+  trainingProgramId: Joi.number(),
   status: Joi.number().valid(0, 1),
 };
 

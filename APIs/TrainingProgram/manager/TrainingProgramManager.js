@@ -1,7 +1,7 @@
 "use strict";
-const CourseResourceAccess = require("../resourceAccess/CourseResourceAccess");
+const TrainingProgramResourceAccess = require("../resourceAccess/TrainingProgramResourceAccess");
 const Logger = require("../../../utils/logging");
-const { STAFF_ROLE } = require("../CourseConstant");
+const { STAFF_ROLE } = require("../TrainingProgramConstant");
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 async function insert(req) {
@@ -17,12 +17,14 @@ async function insert(req) {
         reject("NOT_ALLOWED");
         return;
       }
-      let courseData = req.payload;
+      let trainingProgramData = req.payload;
 
       //create new user
-      let addResult = await CourseResourceAccess.insert(courseData);
+      let addResult = await TrainingProgramResourceAccess.insert(
+        trainingProgramData
+      );
       if (addResult === undefined) {
-        reject("can not insert course");
+        reject("can not insert training program");
         return;
       } else {
         resolve(addResult);
@@ -56,19 +58,19 @@ async function find(req) {
         filter = {};
       }
 
-      let courses = await CourseResourceAccess.customFind(
+      let training_rograms = await TrainingProgramResourceAccess.customFind(
         filter,
         skip,
         limit,
         order
       );
 
-      if (courses && courses.length > 0) {
-        let CourseCount = await CourseResourceAccess.count(filter, [
-          order.key,
-          order.value,
-        ]);
-        resolve({ data: courses, total: CourseCount });
+      if (training_rograms && training_rograms.length > 0) {
+        let TrainingProgramCount = await TrainingProgramResourceAccess.count(
+          filter,
+          [order.key, order.value]
+        );
+        resolve({ data: training_rograms, total: TrainingProgramCount });
       } else {
         resolve({ data: [], total: 0 });
       }
@@ -88,7 +90,7 @@ async function getList(req) {
       let order = req.payload.order;
       let searchText = filter.name;
       delete filter.name;
-      let data = await CourseResourceAccess.customFind(
+      let data = await TrainingProgramResourceAccess.customFind(
         filter,
         skip,
         limit,
@@ -96,7 +98,7 @@ async function getList(req) {
         searchText
       );
       if (data && data.length > 0) {
-        let count = await CourseResourceAccess.customCount(filter);
+        let count = await TrainingProgramResourceAccess.customCount(filter);
         resolve({ data: data, total: count });
       } else {
         resolve({ data: [], total: 0 });
@@ -121,12 +123,12 @@ async function updateById(req) {
         return;
       }
 
-      let courrseId = req.payload.id;
-      let courseData = req.payload.data;
+      let TrainingProgramId = req.payload.id;
+      let TrainingProgramData = req.payload.data;
 
-      let updateResult = await CourseResourceAccess.updateById(
-        courrseId,
-        courseData
+      let updateResult = await TrainingProgramResourceAccess.updateById(
+        TrainingProgramId,
+        TrainingProgramData
       );
 
       if (updateResult) {
@@ -134,7 +136,7 @@ async function updateById(req) {
         resolve(updateResult);
       }
 
-      reject("failed to update course");
+      reject("failed to update training program");
     } catch (e) {
       Logger.error(__filename + e);
       reject(e);
@@ -154,12 +156,15 @@ async function findById(req) {
         reject("NOT_ALLOWED");
         return;
       }
-      let course = await CourseResourceAccess.findById(req.query.id, "id");
-      if (course) {
-        delete course.password;
-        resolve(course);
+      let training_programs = await TrainingProgramResourceAccess.findById(
+        req.query.id,
+        "id"
+      );
+      if (training_programs) {
+        delete training_programs.password;
+        resolve(training_programs);
       }
-      reject("Not found course");
+      reject("Not found training program");
     } catch (e) {
       Logger.error(__filename, e);
       reject("failed");

@@ -23,7 +23,17 @@ async function find(filter, skip, limit, order) {
 }
 
 async function findById(id, key) {
-  return await CommonResouceFunctions.findById(tableName, key, id);
+  const include = [
+    {
+      model: db.department,
+      required: false,
+    },
+    {
+      model: db.curriculum_sections,
+      required: false,
+    },
+  ];
+  return await CommonResouceFunctions.findById(tableName, key, id, include);
 }
 
 async function count(filter, order) {
@@ -57,18 +67,33 @@ async function customFind(filter, skip, limit, order) {
     };
   }
 
-  const queryFindAll = limit
-    ? {
-        limit: limit,
-      }
-    : {};
-
   return await db[tableName].findAll({
-    ...queryFindAll,
     offset: skip,
     order: [order],
     where: query,
-    raw: true,
+    limit: limit,
+    include: [
+      {
+        model: db.department,
+        required: false,
+      },
+      {
+        model: db.curriculum_sections,
+        required: false,
+        include: [
+          {
+            model: db.product,
+            required: false,
+            include: [
+              {
+                model: db.product_name,
+                required: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
   });
 }
 

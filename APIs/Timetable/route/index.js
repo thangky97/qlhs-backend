@@ -1,21 +1,21 @@
-const Course = require("./CourseRoute");
+const Timetable = require("./TimetableRoute");
 
 module.exports = [
   {
     method: "POST",
-    path: "/course/update",
-    options: Course.updateById,
+    path: "/timetable/update",
+    options: Timetable.updateById,
   },
   // {
   //   method: "POST",
-  //   path: "/course/delete",
-  //   options: Course.deleteById,
+  //   path: "/timetable/delete",
+  //   options: Timetable.deleteById,
   // },
-  { method: "POST", path: "/course/get-list", options: Course.find },
-  { method: "POST", path: "/course/insert", options: Course.insert },
+  { method: "POST", path: "/timetable/get-list", options: Timetable.find },
+  { method: "POST", path: "/timetable/insert", options: Timetable.insert },
   {
     method: "GET",
-    path: "/course/get-detail",
-    options: Course.findById,
+    path: "/timetable/get-detail",
+    options: Timetable.findById,
   },
 ];

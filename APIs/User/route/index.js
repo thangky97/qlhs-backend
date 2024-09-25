@@ -115,20 +115,4 @@ module.exports = [
     path: "/user/delete-usertoken-detail",
     options: UserRoute.removeTokenDetail,
   },
-
-  {
-    method: "POST",
-    path: "/user/training/history",
-    options: UserRoute.insertTrainingHistory,
-  },
-  {
-    method: "POST",
-    path: "/user/training/history/get-list",
-    options: UserRoute.findTrainingHistory,
-  },
-  {
-    method: "GET",
-    path: "/user/training-history-detail",
-    options: UserRoute.getTrainingHistoryDetail,
-  },
 ];
