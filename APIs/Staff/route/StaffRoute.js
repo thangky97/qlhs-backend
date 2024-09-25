@@ -6,6 +6,7 @@ const Response = require("../../Common/route/response").setup(Manager);
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 const insertSchema = {
+  code: Joi.string().allow(null),
   last_name: Joi.string().max(25).required(),
   first_name: Joi.string().max(25).required(),
   username: Joi.string().alphanum().min(6).max(25).required(),
@@ -21,6 +22,7 @@ const insertSchema = {
 };
 
 const updateSchema = {
+  code: Joi.string().allow(null),
   last_name: Joi.string(),
   first_name: Joi.string(),
   phone: Joi.string(),
@@ -36,6 +38,7 @@ const updateSchema = {
 
 const filterSchema = {
   last_name: Joi.string(),
+  code: Joi.string().allow(null),
   first_name: Joi.string(),
   phone: Joi.string(),
   // role: Joi.string(),

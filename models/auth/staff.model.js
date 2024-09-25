@@ -52,6 +52,10 @@ module.exports = (sequelize) => {
       type: Sequelize.STRING(500),
       allowNull: true,
     },
+    code: {
+      type: Sequelize.STRING(25),
+      allowNull: true,
+    },
   });
 
   return StaffSchema;

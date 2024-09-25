@@ -91,6 +91,12 @@ async function customFind(filter, skip, limit, orderBy, searchText) {
       {
         model: db.department,
         required: true,
+        include: [
+          {
+            model: db.training_programs,
+            required: true,
+          },
+        ],
       },
     ],
   });
