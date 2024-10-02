@@ -7,15 +7,15 @@ const CommonFunctions = require("../../Common/CommonFunctions");
 async function insert(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_STAFF
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let DoccumentData = req.payload;
 
       //create new user
@@ -48,15 +48,15 @@ async function insert(req) {
 async function find(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_STAFF
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let filter = req.payload.filter;
       let skip = req.payload.skip;
       let limit = req.payload.limit;
@@ -119,15 +119,15 @@ async function getList(req) {
 async function updateById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_STAFF
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let DoccumentData = req.payload.data;
       let sectionId = req.payload.id;
 
@@ -167,15 +167,15 @@ async function getDetail(req) {
 async function findById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_STAFF
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let section = await DocumentsResourceAccess.findById(req.query.id, "id");
       if (section) {
         delete section.password;

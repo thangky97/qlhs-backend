@@ -9,13 +9,21 @@ const CommonFunctions = require("../../Common/CommonFunctions");
 async function insert(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -54,13 +62,21 @@ async function insert(req) {
 async function find(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -97,13 +113,21 @@ async function find(req) {
 async function updateById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -130,13 +154,21 @@ async function updateById(req) {
 async function findById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -228,13 +260,21 @@ async function changePasswordStaff(req) {
 async function resetPasswordStaff(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -260,13 +300,21 @@ async function resetPasswordStaff(req) {
 async function adminChangePasswordStaff(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -300,13 +348,21 @@ async function adminChangePasswordStaff(req) {
 async function deleteStaffById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
         reject("NOT_ALLOWED");
         return;
       }

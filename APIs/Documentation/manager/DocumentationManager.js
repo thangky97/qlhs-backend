@@ -39,15 +39,15 @@ async function find(req) {
 async function create(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_STAFF
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let data = await DocumentationResourceAccess.create(req.payload);
       resolve({ data: data });
     } catch (e) {
@@ -60,15 +60,15 @@ async function create(req) {
 async function update(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_STAFF
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_STAFF
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let document_id = req.payload.document_id;
       delete req.payload.document_id;
       let data = await DocumentationResourceAccess.updateById(

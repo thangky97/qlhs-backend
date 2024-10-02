@@ -62,12 +62,15 @@ async function customFind(filter, skip, limit, order) {
     }),
     where: query,
     // raw: true,
-    // include: [
-    //   {
-    //     model: db.course,
-    //     as: "course",
-    //   },
-    // ],
+    include: [
+      {
+        model: db.product,
+        // as: "course",
+        include: {
+          model: db.product_name,
+        },
+      },
+    ],
   });
 }
 

@@ -105,6 +105,12 @@ db.timetable = require("./timetable/timetable.model")(sequelize, Sequelize);
 //kì học
 db.semester = require("./semester/semester.model")(sequelize, Sequelize);
 
+//diểm danh
+db.roll_call = require("./rollCall/roll-call.model")(sequelize, Sequelize);
+
+//lịch sử diểm danh
+db.history = require("./history/history.model")(sequelize, Sequelize);
+
 //quan he
 db.product.hasMany(db.product_name, { foreignKey: "product_id" });
 db.product_name.belongsTo(db.product, { foreignKey: "id" });
@@ -190,5 +196,20 @@ db.timetable.belongsTo(db.curriculum_sections, {
 });
 
 //end quan he timetable
+
+//quan he diem danh
+db.curriculum_sections.hasMany(db.roll_call, {
+  as: "roll_call_curriculum_section",
+});
+db.roll_call.belongsTo(db.curriculum_sections, {
+  foreignKey: "curriculumSectionId",
+});
+
+db.staff.hasMany(db.roll_call, { as: "roll_call_user" });
+db.roll_call.belongsTo(db.staff, {
+  foreignKey: "userId",
+});
+
+//end quan he diem danh
 
 module.exports = db;

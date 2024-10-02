@@ -12,6 +12,7 @@ const insertSchema = {
   date: Joi.string().allow(null),
   password: Joi.string().allow(null),
   instructorId: Joi.number(),
+  userId: Joi.array().items(Joi.number()).allow(null), // Thay đổi thành mảng số
   courseId: Joi.number().allow(null),
   productId: Joi.number(),
   description: Joi.string().allow(""),
@@ -27,6 +28,7 @@ const updateSchema = {
   date: Joi.string().allow(null),
   password: Joi.string().allow(null),
   instructorId: Joi.number(),
+  // userId: Joi.number().allow(null),
   courseId: Joi.number().allow(null),
   productId: Joi.number(),
   description: Joi.string().allow(""),
@@ -38,9 +40,9 @@ const filterSchema = {
   status: Joi.number().valid(0, 1),
   lang: Joi.string(),
   code: Joi.string(),
-  instructorId: Joi.number().allow(""),
+  instructorId: Joi.number().allow(null),
   courseId: Joi.number().allow(""),
-  productId: Joi.number().allow(""),
+  productId: Joi.number().allow(null),
 };
 
 module.exports = {

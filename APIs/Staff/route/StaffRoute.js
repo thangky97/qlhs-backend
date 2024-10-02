@@ -17,7 +17,7 @@ const insertSchema = {
   role: Joi.string(),
   position: Joi.string().allow(null),
   departmentId: Joi.number().allow(null),
-  curriculumSectionId: Joi.number().allow(null),
+  // curriculumSectionId: Joi.number().allow(null),
   avatar: Joi.string().allow(null),
 };
 
@@ -32,7 +32,7 @@ const updateSchema = {
   role: Joi.string(),
   position: Joi.string().allow(null),
   departmentId: Joi.number().allow(null),
-  curriculumSectionId: Joi.number().allow(null),
+  // curriculumSectionId: Joi.number().allow(null),
   avatar: Joi.string().allow(null),
 };
 
@@ -49,7 +49,7 @@ const filterSchema = {
   email: Joi.string().email(),
   status: Joi.number().valid(0, 1, 2, 3),
   departmentId: Joi.number().allow(null),
-  curriculumSectionId: Joi.number().allow(null),
+  // curriculumSectionId: Joi.number().allow(null),
 };
 
 module.exports = {

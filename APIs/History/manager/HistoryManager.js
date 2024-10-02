@@ -1,7 +1,7 @@
 "use strict";
-const TimetableResourceAccess = require("../resourceAccess/TimetableResourceAccess");
+const HistoryResourceAccess = require("../resourceAccess/HistoryResourceAccess");
 const Logger = require("../../../utils/logging");
-const { STAFF_ROLE } = require("../TimetableConstant");
+const { STAFF_ROLE } = require("../HistoryConstant");
 const CommonFunctions = require("../../Common/CommonFunctions");
 
 async function insert(req) {
@@ -25,11 +25,19 @@ async function insert(req) {
         reject("NOT_ALLOWED");
         return;
       }
-      let timetableData = req.payload;
+      let data = req.payload;
 
-      let addResult = await TimetableResourceAccess.insert(timetableData);
+      let addResult = await HistoryResourceAccess.insert({
+        rollCallId: data.rollCallId,
+        time: data.time,
+        date: data.date,
+        userId: data.userId,
+        note: data.note,
+        status: data.status,
+      });
+
       if (addResult === undefined) {
-        reject("can not insert timetable");
+        reject("can not insert history");
         return;
       } else {
         resolve(addResult);
@@ -37,6 +45,7 @@ async function insert(req) {
       return;
     } catch (e) {
       Logger.error(`${__filename} ${e}`);
+      reject("failed");
     }
   });
 }
@@ -71,19 +80,19 @@ async function find(req) {
         filter = {};
       }
 
-      let timetables = await TimetableResourceAccess.customFind(
+      let data = await HistoryResourceAccess.customFind(
         filter,
         skip,
         limit,
         order
       );
 
-      if (timetables && timetables.length > 0) {
-        let timetableCount = await TimetableResourceAccess.count(filter, [
+      if (data && data.length > 0) {
+        let dataCount = await HistoryResourceAccess.count(filter, [
           order.key,
           order.value,
         ]);
-        resolve({ data: timetables, total: timetableCount });
+        resolve({ data: data, total: dataCount });
       } else {
         resolve({ data: [], total: 0 });
       }
@@ -93,7 +102,6 @@ async function find(req) {
     }
   });
 }
-
 async function getList(req) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -102,8 +110,8 @@ async function getList(req) {
       let limit = req.payload.limit;
       let order = req.payload.order;
       let searchText = filter.name;
-      delete filter.name;
-      let data = await TimetableResourceAccess.customFind(
+      // delete filter.name;
+      let data = await HistoryResourceAccess.customFind(
         filter,
         skip,
         limit,
@@ -111,7 +119,7 @@ async function getList(req) {
         searchText
       );
       if (data && data.length > 0) {
-        let count = await TimetableResourceAccess.customCount(filter);
+        let count = await HistoryResourceAccess.customCount(filter);
         resolve({ data: data, total: count });
       } else {
         resolve({ data: [], total: 0 });
@@ -143,24 +151,34 @@ async function updateById(req) {
         reject("NOT_ALLOWED");
         return;
       }
+      let data = req.payload.data;
+      let dataId = req.payload.id;
 
-      let timetableId = req.payload.id;
-      let timetableData = req.payload.data;
-
-      let updateResult = await TimetableResourceAccess.updateById(
-        timetableId,
-        timetableData
-      );
-
+      let updateResult = await HistoryResourceAccess.updateById(dataId, data);
       if (updateResult) {
-        delete updateResult.password;
-        resolve(updateResult);
+        resolve("success");
       }
 
-      reject("failed to update timetable");
+      reject("failed to update history");
     } catch (e) {
       Logger.error(__filename + e);
       reject(e);
+    }
+  });
+}
+
+async function getDetail(req) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await HistoryResourceAccess.customGetDetail(req.query.id);
+      if (data) {
+        resolve(data);
+      } else {
+        resolve({});
+      }
+    } catch (error) {
+      Logger.error("get detail history error " + error);
+      reject("failed");
     }
   });
 }
@@ -185,15 +203,46 @@ async function findById(req) {
         reject("NOT_ALLOWED");
         return;
       }
-      let timetable = await TimetableResourceAccess.findById(
-        req.query.id,
-        "id"
-      );
-      if (timetable) {
-        delete timetable.password;
-        resolve(timetable);
+      let data = await HistoryResourceAccess.findById(req.query.id, "id");
+      if (data) {
+        delete data.password;
+        resolve(data);
       }
-      reject("Not found timetable");
+      reject("Not found history");
+    } catch (e) {
+      Logger.error(__filename, e);
+      reject("failed");
+    }
+    return;
+  });
+}
+async function deleteById(req) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      const isManageUser = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_USER
+      );
+
+      if (!isManageStaff && !isManageSystem && !isManageUser) {
+        reject("NOT_ALLOWED");
+        return;
+      }
+      let data = await HistoryResourceAccess.deleteById(req.query.id, "id");
+      if (data) {
+        delete data.password;
+        resolve(data);
+      }
+      reject("Not found history");
     } catch (e) {
       Logger.error(__filename, e);
       reject("failed");
@@ -208,4 +257,6 @@ module.exports = {
   updateById,
   findById,
   getList,
+  getDetail,
+  deleteById,
 };

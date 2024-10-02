@@ -23,15 +23,15 @@ async function findAll() {
 async function insert(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_SYSTEM
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let addSetting = req.payload;
       let data = await SettingResourceAccess.findAll();
       if (data && data.length > 0) {
@@ -55,15 +55,15 @@ async function insert(req) {
 async function deleteById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_SYSTEM
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let id = req.payload.id;
       let data = await SettingResourceAccess.deleteById(id);
       if (data) {
@@ -81,15 +81,15 @@ async function deleteById(req) {
 async function updateById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        (await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_SYSTEM
-        )) == false
-      ) {
-        reject("NOT_ALLOWED");
-        return;
-      }
+      // if (
+      //   (await CommonFunctions.verifyRole(
+      //     req.currentUser,
+      //     STAFF_ROLE.MANAGE_SYSTEM
+      //   )) == false
+      // ) {
+      //   reject("NOT_ALLOWED");
+      //   return;
+      // }
       let updateData = req.payload.data;
       let data = await SettingResourceAccess.findAll();
       if (data && data.length > 0) {

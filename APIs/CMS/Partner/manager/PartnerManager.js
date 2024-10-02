@@ -1,8 +1,8 @@
 "use strict";
 const Logger = require("../../../../utils/logging");
 const PartnerResourceAccess = require("../resourceAccess/PartnerResourceAccess");
-const CommonFunctions = require('../../../Common/CommonFunctions');
-const { STAFF_ROLE } = require('../../../Staff/StaffConstant');
+const CommonFunctions = require("../../../Common/CommonFunctions");
+const { STAFF_ROLE } = require("../../../Staff/StaffConstant");
 
 async function findAll() {
   return new Promise(async (resolve, reject) => {
@@ -23,7 +23,16 @@ async function findAll() {
 async function find(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (await CommonFunctions.verifyRole(req.currentUser, STAFF_ROLE.MANAGE_SYSTEM) == false) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      if (!isManageStaff && !isManageSystem) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -48,18 +57,32 @@ async function find(req) {
 async function insert(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (await CommonFunctions.verifyRole(req.currentUser, STAFF_ROLE.MANAGE_SYSTEM) == false) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      if (!isManageStaff && !isManageSystem) {
         reject("NOT_ALLOWED");
         return;
       }
       let addPartner = req.payload;
-      if (addPartner.priority_index === null || addPartner.priority_index === undefined) {
+      if (
+        addPartner.priority_index === null ||
+        addPartner.priority_index === undefined
+      ) {
         // priority_index = max
         let maxIndex = await PartnerResourceAccess.getMaxPriorityIndex();
         addPartner.priority_index = maxIndex.max + 1;
       } else {
         // check priority_index is exist
-        let isExist = await PartnerResourceAccess.checkExistingIndex(addPartner.priority_index);
+        let isExist = await PartnerResourceAccess.checkExistingIndex(
+          addPartner.priority_index
+        );
         if (isExist) {
           reject("priority_index is exist");
           return;
@@ -70,7 +93,7 @@ async function insert(req) {
       if (data.dataValues) {
         resolve(data.dataValues);
       } else {
-        resolve('failed');
+        resolve("failed");
       }
     } catch (e) {
       Logger.error(__filename + e);
@@ -82,7 +105,16 @@ async function insert(req) {
 async function deleteById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (await CommonFunctions.verifyRole(req.currentUser, STAFF_ROLE.MANAGE_SYSTEM) == false) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      if (!isManageStaff && !isManageSystem) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -106,10 +138,14 @@ async function updateById(req) {
       let data = req.payload.data;
       if (data.priority_index !== null && data.priority_index !== undefined) {
         // check priority_index is exist => switch priority_index
-        let currentDataOfIndex = await PartnerResourceAccess.checkExistingIndex(data.priority_index);
+        let currentDataOfIndex = await PartnerResourceAccess.checkExistingIndex(
+          data.priority_index
+        );
         if (currentDataOfIndex) {
           let currentDataIndex = await PartnerResourceAccess.findById(id);
-          await PartnerResourceAccess.updateById(currentDataOfIndex.id, { priority_index: currentDataIndex.priority_index });
+          await PartnerResourceAccess.updateById(currentDataOfIndex.id, {
+            priority_index: currentDataIndex.priority_index,
+          });
         }
       }
       let res = await PartnerResourceAccess.updateById(id, data);
@@ -147,5 +183,5 @@ module.exports = {
   insert,
   deleteById,
   updateById,
-  getDetailById
+  getDetailById,
 };

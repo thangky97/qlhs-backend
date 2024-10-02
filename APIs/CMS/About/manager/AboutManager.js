@@ -32,12 +32,16 @@ async function findAll(req) {
 async function insert(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_SYSTEM == false
-        )
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      if (!isManageStaff && !isManageSystem) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -67,12 +71,16 @@ async function insert(req) {
 async function deleteById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_SYSTEM == false
-        )
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      if (!isManageStaff && !isManageSystem) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -93,12 +101,16 @@ async function deleteById(req) {
 async function updateById(req) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        await CommonFunctions.verifyRole(
-          req.currentUser,
-          STAFF_ROLE.MANAGE_SYSTEM == false
-        )
-      ) {
+      const isManageStaff = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_STAFF
+      );
+      const isManageSystem = await CommonFunctions.verifyRole(
+        req.currentUser,
+        STAFF_ROLE.MANAGE_SYSTEM
+      );
+
+      if (!isManageStaff && !isManageSystem) {
         reject("NOT_ALLOWED");
         return;
       }
@@ -332,7 +344,6 @@ async function sendpaycloud(req) {
   });
 }
 
-
 async function sendTokenOrderInformation(req) {
   return new Promise(async (resolve, reject) => {
     try {
@@ -380,5 +391,5 @@ module.exports = {
   notification,
   cloudContact,
   sendTokenOrderInformation,
-  sendpaycloud
+  sendpaycloud,
 };

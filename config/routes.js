@@ -19,6 +19,8 @@ const Department = require("../APIs/Department/route/index");
 const TrainingProgram = require("../APIs/TrainingProgram/route/index");
 const Semester = require("../APIs/Semester/route/index");
 const Timetable = require("../APIs/Timetable/route/index");
+const RollCall = require("../APIs/Roll_Call/route/index");
+const History = require("../APIs//History/route/index");
 
 var APIs = [
   //Upload APIs
@@ -59,6 +61,8 @@ APIs = APIs.concat(Department);
 APIs = APIs.concat(TrainingProgram);
 APIs = APIs.concat(Semester);
 APIs = APIs.concat(Timetable);
+APIs = APIs.concat(RollCall);
+APIs = APIs.concat(History);
 
 // Q Trafic
 APIs = APIs.concat(require("../APIs/Intersection/route"));
