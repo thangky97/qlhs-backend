@@ -22,15 +22,6 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.language = require("./language.model")(sequelize, Sequelize);
-//cms
-db.about = require("./cms/about.model")(sequelize, Sequelize);
-db.setting = require("./cms/setting.model")(sequelize, Sequelize);
-
-//slide
-db.slide = require("./cms/slide.model")(sequelize, Sequelize);
-
-//partner
-db.partner = require("./cms/partner/partner.model")(sequelize, Sequelize);
 
 //auth
 db.users = require("./auth/user.model")(sequelize, Sequelize);
@@ -40,11 +31,6 @@ db.staff = require("./auth/staff.model")(sequelize, Sequelize);
 db.product = require("./product/product.model")(sequelize, Sequelize);
 db.product_name = require("./product/product-name.model")(sequelize, Sequelize);
 db.product_description = require("./product/product-desc.model")(
-  sequelize,
-  Sequelize
-);
-//cloud
-db.democloudapplications = require("./demoCloud/demo-cloud-application.model")(
   sequelize,
   Sequelize
 );
@@ -69,20 +55,8 @@ db.notifications = require("./notification/notification.model")(
   Sequelize
 );
 
-db.course_documents = require("./curriculum/course-documents.model")(
-  sequelize,
-  Sequelize
-);
 //instructors
 db.instructors = require("./instructors/instructors.model")(
-  sequelize,
-  Sequelize
-);
-db.courseinstructors = require("./instructors/course_instructors")(
-  sequelize,
-  Sequelize
-);
-db.instructorslevels = require("./instructors/instruction_levels")(
   sequelize,
   Sequelize
 );
